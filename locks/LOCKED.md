@@ -244,4 +244,12 @@ These lines are baked into this repo's own pastes. They come from pre-run 6's wo
 
 ## Locked during pre-run 7
 
-Nothing yet. When a fix works, append it here, one block per fix, in the form shown above: UTC time, what failed, what was changed, why that change stays.
+When a fix works, append it here, one block per fix, in the form shown above: UTC time, what failed, what was changed, why that change stays.
+
+```
+- 2026-11-11T22:14:13Z.
+- What worked: (iii) three payment senders per kept kaspad on the same two public kaspads as pre-run 6. HOLD-3 met at 182,331 / 182,657 / 182,945 desk submit-OK a minute (pre-run 6: 132,439 to 144,595), and HOLD-4's pinned minute (22:09Z) read 223,569. No rejects and no dropped sockets; answer times 34 to 42 ms median. (i) The family node read a mempool of 90,000 or more once (22:02:38Z). It was logged as a mark, no skip was set, and all sixteen families kept attempting through RETURN. HOLD-1, HOLD-2, HOLD-3, and RETURN each met on their first three minutes, with no repair. Every count file reached origin on the first try. The bot filed a legal NO SEND no-free-node for HOLD-4.
+- What failed: (1) Mini's node stopped validating the UTXO set from about 22:02Z under the load, so Mini's HOLD-3 (two of three minutes), HOLD-4, and RETURN files list their minutes as not read. Its heads repeat the desk's. (2) The covenant families nearly stopped landing from HOLD-2 on: floor (100 sompi/gram) and double (200) cohorts both lost to the 150 sompi/gram payments, and came back in RETURN. This is a finding, not a fault of the runner. (3) Submit-OK ran ahead of what blocks carried in HOLD-3 and HOLD-4. (ii) was not exercised live, because there was no repair.
+- What was changed: nothing in this run. The runner was not restarted.
+- Why that change stays: (i) and (iii) held under the first live run that used them. A next repo keeps them, and adds a counting path that keeps up under load before it calls any step above HOLD-2 a chain figure.
+```
