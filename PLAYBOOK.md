@@ -61,6 +61,17 @@ Not a gate. A status line, so nobody guesses.
   - Unique kaspads: the bot is expected to write `NO SEND` and `no-free-node` unless another kaspad is free and synced in its pass.
 - Arm: the operator's instruction to start everything, and on 2026-11-11 to keep going, keep experimenting, and spend what the run needs. Nothing has sent from this repo.
 
+## Offline rehearsals, recorded before `PRE-RUN-OPEN`
+
+Two rehearsals ran side by side on the desk on 2026-11-11, from 21:17Z, with this repo's desk runner, pay sender, and kit17. Each used a local stand-in for the two public kaspads whose connections answer in about 1-second submit loops (about 1,000 submits a second per connection), a local stand-in for the payment key's coins, and a local origin. They sent nothing to the network. The family sender, builder, and coordinator ran against the stand-in.
+
+- Rehearsal A: three senders per kaspad (six), pile 8,400, the family skip line at 90,000 for the test, a stand-in mempool over the line for 70 seconds in HOLD-1, node 5 unsynced until the repair restart, and 1,000 phantom coins listed on the payment key after 150 seconds that could not be spent.
+  - (i): `NODE_SKIP node=fam reason=mempool_90k` at 21:18:05Z and `NODE_SKIP_CLEAR` at 21:19:15Z when the mempool read under the line. Minutes 21:18 and 21:19 carried `node-skip-fam:mempool_90k`; 21:20 did not. The families attempted again after the clear.
+  - (ii): at the HOLD-1 repair all six senders handed off 1,400 each. The node view listed 9,400 coins (the 1,000 phantoms too). The deal was 8,400, `truth=handoff`, `handed_unlisted_kept=0`, none over the pile, 1,400 each. No phantom coin was ever tried.
+  - (iii): HOLD-1 `MET` after the repair (60,755, 60,796, 60,784), HOLD-2 `MET` (121,498, 121,560, 121,554), HOLD-3 `MET` (182,465, 182,307, 182,469; about 91,200 per sender in three minutes), HOLD-4 observation 245,972, RETURN `MET` (60,838, 60,808, 60,821), then METHOD. The start deal was 8,400 over six senders, 1,400 each, and every sender logged `PAY_START` at the first start.
+- Rehearsal B, the control: one sender per kaspad (two), same pile, same stand-in loops, skip line 0. HOLD-1 `MET` (60,819, 60,431, 60,852). HOLD-2 `NOT MET` after one repair: 103,377–109,458 a minute against 121,620. HOLD-3 `NOT MET` after one repair: 100,800–109,200 a minute against 182,400. It was stopped after its HOLD-3 file, before its HOLD-4 minute, since it had shown what it was for. Under a limit per connection, two senders cannot hold HOLD-3; six can.
+- What the rehearsal does not prove: whether a public kaspad's limit is per connection or per node. If it is per node, three senders on it will not lift HOLD-3 live, and the minutes will show that.
+
 ## When something breaks
 
 Append a worked fix to [locks/LOCKED.md](locks/LOCKED.md) in the form that page shows, and a repair line to `logs/FIXES.md`. If the run dies before RETURN, write `logs/FAILED.md`, stop every runner and waiter, and do not resume. The next attempt is a new repo that starts from this repo's lock file. Do not rewrite the go files in this repo to match the result.
